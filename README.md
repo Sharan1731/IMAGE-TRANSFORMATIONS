@@ -1,6 +1,6 @@
-# EX - 4 IMAGE-TRANSFORMATIONS
-
-
+# IMAGE-TRANSFORMATIONS
+## NAME:SHARAN G
+## REG NO:212223230203
 ## Aim
 To perform image transformation such as Translation, Scaling, Shearing, Reflection, Rotation and Cropping using OpenCV and Python.
 
@@ -8,114 +8,155 @@ To perform image transformation such as Translation, Scaling, Shearing, Reflecti
 Anaconda - Python 3.7
 
 ## Algorithm:
-### Step1:
-
+## Step1:
 Import necessary libraries such as OpenCV, NumPy, and Matplotlib for image processing and visualization.
 
-### Step2:
-
+## Step2:
 Read the input image using cv2.imread() and store it in a variable for further processing.
 
-
-### Step3:
-
+## Step3:
 Apply various transformations like translation, scaling, shearing, reflection, rotation, and cropping by defining corresponding functions:
 
-1.Translation moves the image along the x or y-axis.
-2.Scaling resizes the image by scaling factors.
-3.Shearing distorts the image along one axis.
-4.Reflection flips the image horizontally or vertically.
-5.Rotation rotates the image by a given angle.
+1.Translation moves the image along the x or y-axis. 2.Scaling resizes the image by scaling factors. 3.Shearing distorts the image along one axis. 4.Reflection flips the image horizontally or vertically. 5.Rotation rotates the image by a given angle.
 
-### Step4:
+## Step4:
 Display the transformed images using Matplotlib for visualization. Convert the BGR image to RGB format to ensure proper color representation.
 
-### Step5:
+## Step5:
 Save or display the final transformed images for analysis and use plt.show() to display them inline in Jupyter or compatible environments.
-## Software Required:
-Anaconda - Python 3.7
 
-### Program:
-```
-python
-## EX-4 : IMAGE-TRANSFORMATIONS ##
-## NAME : SHARAN G ##
-## REG.NO: 212223230203 ##
-
+## Program:
+````
 import cv2
 import numpy as np
-# Load the image
-image = cv2.imread('bird.jpg') # Replace with your image path
-(h, w) = image.shape[:2]
-# ----------------------- Translation -----------------------
-
-# Move image 100 pixels right and 50 pixels down
-
-tx, ty = 100, 50
-translation_matrix = np.float32([[1, 0, tx], [0, 1, ty]])
-translated = cv2.warpAffine(image, translation_matrix, (w, h))
-# ----------------------- Scaling -----------------------
-
-# Resize by 1.5x horizontally and 0.75x vertically
-
-scaled = cv2.resize(image, None, fx=1.5, fy=0.75, interpolation=cv2.INTER_LINEAR)
-# ----------------------- Shearing -----------------------
-
-# Shear image horizontally
-
-shear_matrix = np.float32([[1, 0.5, 0], [0, 1, 0]]) # x-shear
-sheared = cv2.warpAffine(image, shear_matrix, (int(w + 0.5*h), h))
-# ----------------------- Reflection (Flipping) -----------------------
-
-# Flip horizontally (mirror image)
-
-h_flip = cv2.flip(image, 1)
-
-# Flip vertically
-
-v_flip = cv2.flip(image, 0)
-# ----------------------- Rotation -----------------------
-
-# Rotate by 45 degrees around the center
-
-angle = 45
-scale = 1.0
-center = (w // 2, h // 2)
-rotation_matrix = cv2.getRotationMatrix2D(center, angle, scale)
-rotated = cv2.warpAffine(image, rotation_matrix, (w, h))
-# ----------------------- Cropping -----------------------
-
-# Crop a region (top-left 200x200)
-
-cropped = image[0:200, 0:200]
 import matplotlib.pyplot as plt
-# ----------------------- Display Results with Matplotlib -----------------------
+from google.colab import files
 
-titles = [
-    "Original", "Translated", "Scaled", "Sheared",
-    "Horizontally Flipped", "Vertically Flipped",
-    "Rotated", "Cropped"
-]
-images = [
-    image, translated, scaled, sheared,
-    h_flip, v_flip, rotated, cropped
-]
-plt.figure(figsize=(12, 10))
-for i in range(len(images)):
-    plt.subplot(3, 3, i + 1)  # 3 rows, 3 columns
-    plt.imshow(images[i])
-    plt.title(titles[i], fontsize=10)
-    plt.axis("off")
+uploaded = files.upload()
+
+image_path = list(uploaded.keys())[0]
+image = cv2.imread(image_path)
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+rows, cols, _ = image.shape
+
+M_translate = np.float32([[1, 0, 50], [0, 1, 100]])
+translated_image = cv2.warpAffine(image_rgb, M_translate, (cols, rows))
+
+scaled_image = cv2.resize(image_rgb, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_LINEAR)
+
+M_shear = np.float32([[1, 0.5, 0], [0.5, 1, 0]])
+sheared_image = cv2.warpAffine(image_rgb, M_shear, (int(cols * 1.5), int(rows * 1.5)))
+
+reflected_image = cv2.flip(image_rgb, 1)
+
+M_rotate = cv2.getRotationMatrix2D((cols / 2, rows / 2), 45, 1)
+rotated_image = cv2.warpAffine(image_rgb, M_rotate, (cols, rows))
+
+cropped_image = image_rgb[50:300, 100:400]
+
+plt.figure(figsize=(15, 10))
+plt.subplot(2, 3, 1)
+plt.imshow(image_rgb)
+plt.title("Original Image")
+plt.axis('off')
+
+plt.subplot(2, 3, 2)
+plt.imshow(translated_image)
+plt.title("Translated Image")
+plt.axis('off')
+
+plt.subplot(2, 3, 3)
+plt.imshow(scaled_image)
+plt.title("Scaled Image")
+plt.axis('off')
+
+plt.subplot(2, 3, 4)
+plt.imshow(sheared_image)
+plt.title("Sheared Image")
+plt.axis('off')
+
+plt.subplot(2, 3, 5)
+plt.imshow(reflected_image)
+plt.title("Reflected Image")
+plt.axis('off')
+
+plt.subplot(2, 3, 6)
+plt.imshow(rotated_image)
+plt.title("Rotated Image")
+plt.axis('off')
 
 plt.tight_layout()
 plt.show()
 
-```
+plt.figure(figsize=(5, 5))
+plt.imshow(cropped_image)
+plt.title("Cropped Image")
+plt.axis('off')
+plt.show()
+
+
+
+``````
 ## Output:
+## ORIGINAL IMAGE
+<img width="623" height="470" alt="image" src="https://github.com/user-attachments/assets/6a724880-5d06-4817-993f-23f8b6357400" />
+
+### i)Image Translation
+<br>
+<img width="632" height="470" alt="image" src="https://github.com/user-attachments/assets/da2e17fc-c463-46bd-bd69-31d3c323c6f2" />
+
+<br>
+<br>
+<br>
+
+### ii) Image Scaling
+<br>
+<img width="651" height="221" alt="image" src="https://github.com/user-attachments/assets/686cda70-af70-491a-ae2c-7c6a0598fce2" />
+
+
+<br>
+<br>
+<br>
+
+
+### iii)Image shearing
+<br>
+<img width="645" height="478" alt="image" src="https://github.com/user-attachments/assets/9cf3223b-ae78-4eb7-819f-1d20ef19d4fc" />
+
+
+<br>
+<br>
+<br>
+
+
+### iv)Image Reflection
+<br>
+<img width="646" height="476" alt="image" src="https://github.com/user-attachments/assets/a090de24-f63c-44e7-8e50-2a7544bde4ec" />
+
+<br>
+<br>
+<br>
 
 
 
-<img width="1190" height="989" alt="download" src="https://github.com/user-attachments/assets/d9152316-c051-4b2c-9df4-e7ddd0226c27" />
+### v)Image Rotation
+<br>
+<img width="650" height="471" alt="image" src="https://github.com/user-attachments/assets/25d7e0a6-178e-4fc9-9cce-4f15ea1b43c6" />
+
+<br>
+<br>
+<br>
+
+
+
+### vi)Image Cropping
+<br>
+<img width="735" height="511" alt="image" src="https://github.com/user-attachments/assets/4d8efd72-87a3-48c7-b6cd-c9e5fa9ba1fe" />
+
+<br>
+<br>
+<br>
 
 
 ## Result: 
