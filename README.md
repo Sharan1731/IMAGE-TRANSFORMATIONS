@@ -1,6 +1,8 @@
-# IMAGE-TRANSFORMATIONS
-## NAME:SHARAN G
-## REG NO:212223230203
+### Exp-4- Record-Image Transformations 
+### NAME :SHARAN G
+### REG NO : 212223230203
+
+
 ## Aim
 To perform image transformation such as Translation, Scaling, Shearing, Reflection, Rotation and Cropping using OpenCV and Python.
 
@@ -8,155 +10,200 @@ To perform image transformation such as Translation, Scaling, Shearing, Reflecti
 Anaconda - Python 3.7
 
 ## Algorithm:
-## Step1:
-Import necessary libraries such as OpenCV, NumPy, and Matplotlib for image processing and visualization.
+### Step1:
+Import necessary libraries (NumPy, OpenCV, Matplotlib).
 
-## Step2:
-Read the input image using cv2.imread() and store it in a variable for further processing.
+### Step2:
+Read an image, convert it to RGB format, and display it using Matplotlib.Define translation parameters (e.g., shifting by 100 pixels horizontally and 200 pixels vertically).Perform translation using cv2.warpAffine().Display the translated image using Matplotlib.
 
-## Step3:
-Apply various transformations like translation, scaling, shearing, reflection, rotation, and cropping by defining corresponding functions:
+### Step3:
+Obtain the dimensions (rows, cols, dim) of the input image.Define a scaling matrix M with scaling factors of 1.5 in the x-direction and 1.8 in the y-direction.Perform perspective transformation using cv2.warpPerspective(), scaling the image by a factor of 1.5 in the x-direction and 1.8 in the y-direction.Display the scaled image using Matplotlib.
 
-1.Translation moves the image along the x or y-axis. 2.Scaling resizes the image by scaling factors. 3.Shearing distorts the image along one axis. 4.Reflection flips the image horizontally or vertically. 5.Rotation rotates the image by a given angle.
+### Step4:
+Define shear matrices M_x and M_y for shearing along the x-axis and y-axis, respectively.Perform perspective transformation using cv2.warpPerspective() with the shear matrices to shear the image along the x-axis and y-axis.Display the sheared images along the x-axis and y-axis using Matplotlib.
 
-## Step4:
-Display the transformed images using Matplotlib for visualization. Convert the BGR image to RGB format to ensure proper color representation.
+### Step5:
+Define reflection matrices M_x and M_y for reflection along the x-axis and y-axis, respectively.Perform perspective transformation using cv2.warpPerspective() with the reflection matrices to reflect the image along the x-axis and y-axis.Display the reflected images along the x-axis and y-axis using Matplotlib.
 
-## Step5:
-Save or display the final transformed images for analysis and use plt.show() to display them inline in Jupyter or compatible environments.
+### Step 6 :
+Define an angle of rotation in radians (here, 10 degrees).Construct a rotation matrix M using the sine and cosine of the angle.Perform perspective transformation using cv2.warpPerspective() with the rotation matrix to rotate the image.Display the rotated image using Matplotlib.
+### Step 7 :
+Define a region of interest by specifying the desired range of rows and columns to crop the image (here, from row 100 to row 300 and from column 100 to column 300).Use array slicing to extract the cropped region from the input image.Display the cropped image using Matplotlib.
 
 ## Program:
-````
-import cv2
+```python
+Developed By: SHARAN
+Register Number:212223230203
+i)Image Translation
+```
+```
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
-from google.colab import files
-
-uploaded = files.upload()
-
-image_path = list(uploaded.keys())[0]
-image = cv2.imread(image_path)
-image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-rows, cols, _ = image.shape
-
-M_translate = np.float32([[1, 0, 50], [0, 1, 100]])
-translated_image = cv2.warpAffine(image_rgb, M_translate, (cols, rows))
-
-scaled_image = cv2.resize(image_rgb, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_LINEAR)
-
-M_shear = np.float32([[1, 0.5, 0], [0.5, 1, 0]])
-sheared_image = cv2.warpAffine(image_rgb, M_shear, (int(cols * 1.5), int(rows * 1.5)))
-
-reflected_image = cv2.flip(image_rgb, 1)
-
-M_rotate = cv2.getRotationMatrix2D((cols / 2, rows / 2), 45, 1)
-rotated_image = cv2.warpAffine(image_rgb, M_rotate, (cols, rows))
-
-cropped_image = image_rgb[50:300, 100:400]
-
-plt.figure(figsize=(15, 10))
-plt.subplot(2, 3, 1)
-plt.imshow(image_rgb)
-plt.title("Original Image")
+input_image = cv2.imread("C:/Users/admin/dipt/DIPT-/redfort.jpg")
+input_image = cv2.cvtColor(input_image,cv2.COLOR_BGR2RGB)
 plt.axis('off')
+plt.imshow(input_image)
+plt.show()
+rows,cols,dim=input_image.shape
+M = np.float32([[1, 0, 100],[0, 1, 200],[0, 0, 1]])
 
-plt.subplot(2, 3, 2)
+translated_image = cv2.warpPerspective(input_image, M, (cols, rows))
+plt.axis('off')
 plt.imshow(translated_image)
-plt.title("Translated Image")
-plt.axis('off')
+plt.show()
+```
 
-plt.subplot(2, 3, 3)
-plt.imshow(scaled_image)
-plt.title("Scaled Image")
-plt.axis('off')
 
-plt.subplot(2, 3, 4)
-plt.imshow(sheared_image)
-plt.title("Sheared Image")
-plt.axis('off')
+ii) Image Scaling
 
-plt.subplot(2, 3, 5)
-plt.imshow(reflected_image)
-plt.title("Reflected Image")
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+input_image = cv2.imread("C:/Users/admin/dipt/DIPT-/redfort.jpg")
+input_image = cv2.cvtColor(input_image,cv2.COLOR_BGR2RGB)
 plt.axis('off')
-
-plt.subplot(2, 3, 6)
-plt.imshow(rotated_image)
-plt.title("Rotated Image")
-plt.axis('off')
-
-plt.tight_layout()
+plt.imshow(input_image)
 plt.show()
 
-plt.figure(figsize=(5, 5))
-plt.imshow(cropped_image)
-plt.title("Cropped Image")
+rows, cols, dim = input_image.shape 
+M = np.float32([[1.5, 0, 0],[0, 1.8, 0],[0, 0, 1]])
+
+scaled_img=cv2.warpPerspective (input_image, M, (cols*2, rows*2))
+plt.imshow(scaled_img)
+plt.show()
+```
+
+iii)Image shearing
+
+
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+input_image = cv2.imread("C:/Users/admin/dipt/DIPT-/redfort.jpg")
+input_image = cv2.cvtColor(input_image,cv2.COLOR_BGR2RGB)
 plt.axis('off')
+plt.imshow(input_image)
 plt.show()
 
+M_x = np.float32([[1, 0.5, 0],[0, 1 ,0],[0,0,1]])
+M_y =np.float32([[1, 0, 0],[0.5, 1, 0],[0, 0, 1]])
+
+sheared_img_xaxis=cv2.warpPerspective(input_image,M_x, (int(cols*1.5), int(rows *1.5)))
+sheared_img_yaxis = cv2.warpPerspective(input_image,M_y,(int(cols*1.5), int(rows*1.5)))
+
+plt.imshow(sheared_img_xaxis)
+plt.show()
+
+plt.imshow(sheared_img_yaxis)
+plt.show()
+```
+
+iv)Image Reflection
+
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+input_image = cv2.imread("C:/Users/admin/dipt/DIPT-/redfort.jpg")
+input_image = cv2.cvtColor(input_image,cv2.COLOR_BGR2RGB)
+plt.axis('off')
+plt.imshow(input_image)
+plt.show()
+
+M_x= np.float32([[1,0, 0],[0, -1, rows],[0, 0, 1]])
+M_y =np.float32([[-1, 0, cols],[ 0, 1, 0 ],[ 0, 0, 1 ]])
+# Apply a perspective transformation to the image
+reflected_img_xaxis=cv2.warpPerspective (input_image, M_x,(int(cols), int(rows)))
+reflected_img_yaxis= cv2.warpPerspective (input_image, M_y, (int(cols), int(rows)))
+
+                                         
+plt.imshow(reflected_img_xaxis)
+plt.show()
+
+plt.imshow(reflected_img_yaxis)
+plt.show()
+
+```
 
 
-``````
+v)Image Rotation
+
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+input_image = cv2.imread("C:/Users/admin/dipt/DIPT-/redfort.jpg")
+input_image = cv2.cvtColor(input_image,cv2.COLOR_BGR2RGB)
+plt.axis('off')
+plt.imshow(input_image)
+plt.show()
+
+angle=np.radians(10)
+M=np.float32([[np.cos(angle),-(np.sin(angle)),0],[np.sin(angle),np.cos(angle),0],[0,0,1]])
+rotated_img = cv2.warpPerspective(input_image,M,(int(cols),int(rows)))
+
+plt.imshow(rotated_img)
+plt.show()
+```
+
+
+vi)Image Cropping
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+input_image = cv2.imread("C:/Users/admin/dipt/DIPT-/redfort.jpg")
+input_image = cv2.cvtColor(input_image,cv2.COLOR_BGR2RGB)
+plt.axis('off')
+plt.imshow(input_image)
+plt.show()
+
+cropped_img= input_image[100:300,100:300]
+
+plt.imshow(cropped_img)
+plt.show()
+
+```
+
+
+
+
+
 ## Output:
-## ORIGINAL IMAGE
-<img width="623" height="470" alt="image" src="https://github.com/user-attachments/assets/6a724880-5d06-4817-993f-23f8b6357400" />
-
 ### i)Image Translation
-<br>
-<img width="632" height="470" alt="image" src="https://github.com/user-attachments/assets/da2e17fc-c463-46bd-bd69-31d3c323c6f2" />
 
-<br>
-<br>
-<br>
+<img width="297" height="411" alt="download" src="https://github.com/user-attachments/assets/29a2150f-1e48-4cab-abbd-510d6996e76a" />
+
 
 ### ii) Image Scaling
-<br>
-<img width="651" height="221" alt="image" src="https://github.com/user-attachments/assets/686cda70-af70-491a-ae2c-7c6a0598fce2" />
 
 
-<br>
-<br>
-<br>
+<img width="297" height="411" alt="download" src="https://github.com/user-attachments/assets/00a0e628-2ed4-4b94-bab8-ce846ee5b4df" />
 
 
 ### iii)Image shearing
-<br>
-<img width="645" height="478" alt="image" src="https://github.com/user-attachments/assets/9cf3223b-ae78-4eb7-819f-1d20ef19d4fc" />
+<img width="515" height="306" alt="download" src="https://github.com/user-attachments/assets/a60f16dd-4df7-4dc5-94b6-25419fd3bb46" />
 
-
-<br>
-<br>
-<br>
 
 
 ### iv)Image Reflection
-<br>
-<img width="646" height="476" alt="image" src="https://github.com/user-attachments/assets/a090de24-f63c-44e7-8e50-2a7544bde4ec" />
 
-<br>
-<br>
-<br>
+<img width="297" height="411" alt="download" src="https://github.com/user-attachments/assets/9e31b04f-4d95-4843-a05b-1a72940b293b" />
 
 
 
 ### v)Image Rotation
-<br>
-<img width="650" height="471" alt="image" src="https://github.com/user-attachments/assets/25d7e0a6-178e-4fc9-9cce-4f15ea1b43c6" />
 
-<br>
-<br>
-<br>
-
+<img width="297" height="411" alt="download" src="https://github.com/user-attachments/assets/8f0a93a9-19f1-4909-9bbc-ef6af9470271" />
 
 
 ### vi)Image Cropping
-<br>
-<img width="735" height="511" alt="image" src="https://github.com/user-attachments/assets/4d8efd72-87a3-48c7-b6cd-c9e5fa9ba1fe" />
 
-<br>
-<br>
-<br>
+<img width="297" height="411" alt="download" src="https://github.com/user-attachments/assets/6362b009-ed48-4de0-9ad8-0c409bb58dfb" />
+
 
 
 ## Result: 
